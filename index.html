@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>請求書画像処理アプリ</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="text-center text-white py-3" style="height: 60px;">
+      <h1 style="font-size: 29px;">請求書画像処理アプリ</h1>
+    </header>
+    <main class="mt-4">
+      <section id="file-selection" class="mb-4">
+        <p><b>ファイル選択</b></p>
+        <input type="file" id="fileInput" class="form-control mb-2">
+        <p><b>ファイル一覧</b></p>
+        <ul id="fileList" class="list-group mb-2">
+        </ul>
+        <div class="btn-group" role="group">
+          <button id="deleteBtn" class="btn btn-primary">削　除</button>
+          <button id="executeBtn" class="btn btn-primary">実　行</button>
+          <button id="downloadBtn" class="btn btn-primary">ダウンロード</button>
+        </div>
+      </section>
+      <section id="extraction-results" class="mb-4">
+        <h2>抽出結果一覧</h2>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>会社名</th>
+              <th>合計金額</th>
+              <th>振込先 1</th>
+              <th>振込先 2</th>
+              <th>振込先 3</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>01</td>
+              <td>株式会社SAMURAI</td>
+              <td>1,000,000</td>
+              <td>三菱東京UFJ銀行 支店名：000 口座番号：0000000</td>
+              <td>三菱東京UFJ銀行 支店名：000 口座番号：0000000</td>
+              <td>三菱東京UFJ銀行 支店名：000 口座番号：0000000</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section id="message">
+        <p class="alert alert-info">この部分には、「完了」した、何かエラーが発生した場合に、メッセージを表示させるためのテキストボックスです。</p>
+      </section>
+    </main>
+    <footer class="text-left py-3" style="height: 100px;">
+      <h5>株式会社 RCC文化センター</h5>
+      <p>〒730-0015 広島県広島市中区橋本町5-11 082-222-2277</p>
+      <p class="text-center text-dark py-2">©2024 RCCBunkaCenter</p>
+    </footer>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const deleteBtn = document.getElementById('deleteBtn'); 
+
+    fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      const listItem = document.createElement('li');
+      listItem.classList.add('list-group-item');
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = file.name; 
+      listItem.appendChild(checkbox); 
+
+      // ファイル名を表示
+      listItem.appendChild(document.createTextNode(file.name));
+
+      fileList.appendChild(listItem);
+    });
+
+    // 削除ボタンのクリックイベントリスナー
+    deleteBtn.addEventListener('click', () => {
+      const listItems = fileList.querySelectorAll('li');
+
+      // 各リスト項目をチェック
+      listItems.forEach(item => {
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        // チェックボックスがチェックされている場合、リスト項目を削除
+        if (checkbox.checked) {
+          fileList.removeChild(item);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
