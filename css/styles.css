@@ -3,72 +3,99 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-}
-header {
-    background-color: rgb(255, 70, 0);
+  }
+  
+  header {
+    background-color: #FA6800; 
     color: white;
     padding: 20px;
     text-align: center;
-}
-main {
+    width: 100%; 
+  }
+  
+  main {
     padding: 20px;
-}
-section {
+    width: 100%; 
+    background-color: #FFF2CC; 
+  }
+  
+  section {
     margin-bottom: 20px;
-}
-h2 {
+  }
+  
+  h2 {
     color: #333;
-}
-#fileInput {
+  }
+  
+  #fileInput {
     display: block;
     margin-bottom: 10px;
-}
-#fileList {
+  }
+  
+  #fileList {
     list-style-type: none;
     padding: 0;
-}
-#fileList li {
+  }
+  
+  #fileList li {
     background-color: #f4f4f4;
     margin-bottom: 5px;
     padding: 10px;
-}
-button {
+  }
+  
+  button {
     background-color: #007BFF;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 3px 50px; 
     margin-right: 10px;
     cursor: pointer;
-}
-button:hover {
+  }
+  
+  button:hover {
     background-color: #0056b3;
-}
-table {
+  }
+  
+  table {
     width: 100%;
     border-collapse: collapse;
-}
-th, td {
+  }
+  
+  th, td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
-}
-th {
+  }
+  
+  th {
     background-color: #f2f2f2;
-}
-footer {
-    background-color: rgb(255, 70, 0);
+  }
+  
+  footer {
+    background-color: #FA6800;
     color: white;
     padding: 20px;
     text-align: center;
-}
-#deleteBtn, #executeBtn, #downloadBtn {
-    height: 35%; 
-    flex-shrink: 0;
-    flex-basis: 120px; /* ボタンの初期幅を120pxに設定 */
+    width: 100%; 
   }
   
-  .btn-group {
-    display: flex;
-    justify-content: center; /* 中央揃え */
-    align-items: center; 
+  #extraction-results {
+    background-color: white; 
+    padding: 30px; /
   }
+
+  .row {
+    justify-content: center;
+  }
+
+.btn-group { 
+  text-align: center; /* ボタンを中央寄せ */
+}
+
+.col-2 {
+  margin: 0 auto; /* 左右に自動的にマージンを設定 */
+}
+
+.btn-group .btn {
+  width: 300px; /* ボタンの幅を300pxに固定 */
+}

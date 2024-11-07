@@ -7,25 +7,29 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="container">
+  <div class="contain   
+er">
     <header class="text-center text-white py-3" style="height: 60px;">
       <h1 style="font-size: 29px;">請求書画像処理アプリ</h1>
     </header>
     <main class="mt-4">
       <section id="file-selection" class="mb-4">
         <p><b>ファイル選択</b></p>
-        <input type="file" id="fileInput" class="form-control mb-2">
+        <div class="custom-file"> 
+          <input type="file" class="custom-file-input" id="fileInput">
+          <label class="custom-file-label" for="fileInput">ファイルを選択</label>
+        </div>
         <p><b>ファイル一覧</b></p>
         <ul id="fileList" class="list-group mb-2">
         </ul>
-        <div class="btn-group" role="group">
-          <button id="deleteBtn" class="btn btn-primary">削　除</button>
-          <button id="executeBtn" class="btn btn-primary">実　行</button>
-          <button id="downloadBtn" class="btn btn-primary">ダウンロード</button>
+        <div class="btn-group row" role="group">
+            <button id="deleteBtn" class="btn btn-primary col-2">削　除</button>
+            <button id="executeBtn" class="btn btn-primary col-2">実　行</button>
+            <button id="downloadBtn" class="btn btn-primary col-2">ダウンロード</button>
         </div>
       </section>
       <section id="extraction-results" class="mb-4">
-        <h2>抽出結果一覧</h2>
+        <p><B>抽出結果一覧</B></p>
         <table class="table table-bordered">
           <thead>
             <tr>
@@ -61,39 +65,118 @@
   </div>
 
   <script>
-    const fileInput = document.getElementById('fileInput');
-    const fileList = document.getElementById('fileList');
-    const deleteBtn = document.getElementById('deleteBtn'); 
+const fileInput = document.getElementById('fileInput');
+const fileList = document.getElementById('fileList');
+const deleteBtn = document.getElementById('deleteBtn');
+const executeBtn = document.getElementById('executeBtn'); // 実行ボタンの要素を取得
+const downloadBtn = document.getElementById('downloadBtn'); // ダウンロードボタンの要素を取得
+const messageBox = document.getElementById('message'); // メッセージボックスの要素を取得
 
-    fileInput.addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      const listItem = document.createElement('li');
-      listItem.classList.add('list-group-item');
+fileInput.addEventListener('change', (event) => {
+  const file = event.target.files[0];
+  const listItem = document.createElement('li');
+  listItem.classList.add('list-group-item');
 
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.value = file.name; 
-      listItem.appendChild(checkbox); 
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.value = file.name;
+  listItem.appendChild(checkbox);
+  listItem.appendChild(document.createTextNode(file.name));
 
-      // ファイル名を表示
-      listItem.appendChild(document.createTextNode(file.name));
+  // 空白行があるかチェック (textContent が空の要素のみを対象とする)
+  const blankLines = fileList.querySelectorAll('li');
+  const trulyBlankLines = Array.from(blankLines).filter(line => line.textContent.trim() === '');
 
-      fileList.appendChild(listItem);
-    });
+  if (trulyBlankLines.length > 0) {
+    // 空白行があれば、最初の空白行を置き換え
+    fileList.replaceChild(listItem, trulyBlankLines[0]);
+  } else {
+    // 空白行がなければ、リストの末尾に追加
+    fileList.appendChild(listItem);
+  }
+});
 
-    // 削除ボタンのクリックイベントリスナー
-    deleteBtn.addEventListener('click', () => {
-      const listItems = fileList.querySelectorAll('li');
+deleteBtn.addEventListener('click', () => {
+  const listItems = fileList.querySelectorAll('li');
+  let checkedCount = 0; // チェックされたアイテムの数をカウント
 
-      // 各リスト項目をチェック
-      listItems.forEach(item => {
-        const checkbox = item.querySelector('input[type="checkbox"]');
-        // チェックボックスがチェックされている場合、リスト項目を削除
-        if (checkbox.checked) {
-          fileList.removeChild(item);
-        }
-      });
-    });
+  listItems.forEach(item => {
+    // チェックボックスが存在するかどうかを確認する
+    const checkbox = item.querySelector('input[type="checkbox"]');
+    if (checkbox) { 
+      if (checkbox.checked) {
+        fileList.removeChild(item);
+        checkedCount++;
+      }
+    }
+  });
+
+  // チェックされたアイテムがなければメッセージを表示
+  if (checkedCount === 0) {
+    showMessage("削除対象のファイルが選択されていません。", "warning");
+  }
+
+  // 削除後に fileList の子要素をすべて削除
+  while (fileList.firstChild) {
+    fileList.removeChild(fileList.firstChild);
+  }
+
+  // 新たに5つの空白行を追加
+  for (let i = 0; i < 5; i++) {
+    const blankLine = document.createElement('li');
+    blankLine.classList.add('list-group-item');
+    blankLine.innerHTML = '&nbsp;';
+    fileList.appendChild(blankLine);
+  }
+});
+
+
+
+executeBtn.addEventListener('click', () => {
+  // チェックされたファイル名を取得
+  const checkedFiles = [];
+  const listItems = fileList.querySelectorAll('li');
+  listItems.forEach(item => {
+    const checkbox = item.querySelector('input[type="checkbox"]');
+    if (checkbox.checked) {
+      checkedFiles.push(checkbox.value);
+    }
+  });
+
+  // チェックされたファイルがなければメッセージを表示
+  if (checkedFiles.length === 0) {
+    showMessage("実行対象のファイルが選択されていません。", "warning");
+    return;
+  }
+
+  // TODO: ここにファイル処理のロジックを実装
+
+  // 成功メッセージを表示
+  showMessage("処理が完了しました。", "success");
+});
+
+
+downloadBtn.addEventListener('click', () => {
+  // TODO: ここにダウンロード処理のロジックを実装
+
+  // 成功メッセージを表示
+  showMessage("ダウンロードが完了しました。", "success");
+});
+
+
+function showMessage(message, type) {
+  messageBox.textContent = message;
+  messageBox.className = `alert alert-${type}`;
+}
+
+window.onload = function() {
+  for (let i = 0; i < 5; i++) {
+    const blankLine = document.createElement('li');
+    blankLine.classList.add('list-group-item');
+    blankLine.innerHTML = '&nbsp;';
+    fileList.appendChild(blankLine);
+  }
+};
   </script>
 </body>
 </html>
